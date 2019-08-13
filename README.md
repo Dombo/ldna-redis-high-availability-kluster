@@ -35,6 +35,13 @@ redis get food
 helm upgrade ${RELEASE_NAME} ./src --namespace rhak --set replicas=${N}
 ```
 
+#### Disrupting
+
+```bash
+# Master will be at ambiguous position after being killed
+kubectl delete pods/redis-high-availability-kluster-server-${N} -n rhak
+```
+
 #### Teardown
 
 ```bash
