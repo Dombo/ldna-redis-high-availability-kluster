@@ -1,0 +1,30 @@
+{{- $replicas := int .Values.replicas }}
+{{- $root := . }} # Workaround: https://github.com/helm/helm/issues/3684
+{{- range $n := until $replicas }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $root.Chart.Name }}-announce-{{ $n }}
+  labels: # TODO Could probably hoist this to some common spsace
+    app: {{ $root.Chart.Name }}
+    release: {{ $root.Release.Name }}
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  ports:
+  - name: server
+    port: {{ $root.Values.redis.port }}
+    protocol: TCP
+    targetPort: redis
+  - name: sentinel
+    port: {{ $root.Values.sentinel.port }}
+    protocol: TCP
+    targetPort: sentinel
+  selector:
+    app: {{ $root.Chart.Name }}
+    release: {{ $root.Release.Name }}
+    "statefulset.kubernetes.io/pod-name": {{ $root.Chart.Name }}-server-{{ $n }}
+{{ end -}}

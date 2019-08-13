@@ -1,0 +1,22 @@
+image:
+  repository: redis
+  tag: 3.2.10-alpine
+
+replicas: 5
+
+## Redis specific configuration options
+redis:
+  port: 6379
+  masterGroupName: rhak-master
+  resources: {}
+
+## Sentinel specific configuration options
+sentinel:
+  port: 26379
+  resources: {}
+
+persistentVolume:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 2Gi

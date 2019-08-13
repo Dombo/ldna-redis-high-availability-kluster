@@ -1,0 +1,22 @@
+The LogDNA Kubernetes Challenge
+=================================
+The goal of this challenge is to assess your resourcefulness and learning agility when facing new problems. Hopefully you will also learn something in the process.
+
+You will be judged more on style and approach than on completeness. We would much rather you understand what you're doing rather than finishing it for the sake of finishing it.
+
+----
+The Problem
+----
+Using Kubernetes and minikube (https://github.com/kubernetes/minikube) build a fully-functional cluster on your laptop that does the following:
+1) Run 3x replicas of redis pods using a single StatefulSet or Deployment with standard redis image `redis:3.2.10-alpine` (no custom images)
+2) On startup of redis pods, there should be a shell script (using a ConfigMap) included as a part of the yaml that automatically discovers all other redis pods and automatically slave itself to any existing masters. No manual intervention should be necessary...the script should perform the necessary SLAVEOF commands.
+
+In general just build a small redis master/slave (not redis cluster) service that can scale up (to say 5 redis pods) and down (to a minimum of 2 redis pods). A single StatefulSet/Deployment should be used for both master and slave configurations with replicas set to 3 (but test between 2 and 5). We'll also be testing your service by randomly killing redis pods. Persistent disk, publicly-facing Service, resource limits, liveness/readiness probes aren't necessary here but would be considered bonuses if you have time.
+
+If you are observant, you should realize that if the existing master redis container were to die, none of the slaves would take over as master. That's fine. As long as the creation of a new replica pod (and therefore would run the startup script again) would fix any existing configurations of all redis pods. Basically, there should be 1 master and n slaves after the script runs.
+Feel free to scour the interwebs for anything that will help you get the job done. Remember *resourcefulness* is key here.
+
+Your deliverable should just be the lone yaml file (please keep any Service(s) whether internal or publicly-facing, ConfigMap and StatefulSet/Deployment in the same yaml file separated by `---`'s, which is valid syntax). While there can be multiple ConfigMaps or Services as needed, there should be only 1 StatefulSet/Deployment. We'll be running your yaml using `kubectl apply -f yourfile.yaml`.
+
+Lastly, you might feel this service is dumb and have a better solution to propose, challenge us, persuade us. That's what we're all about.
+---------------------------------
