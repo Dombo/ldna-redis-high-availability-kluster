@@ -1,6 +1,6 @@
 #### Dependencies
 
-* helm (inspired by redis-ha)
+* helm (inspired by stable/redis-ha)
 * minikube
 * kubectl
 
