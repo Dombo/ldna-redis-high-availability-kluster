@@ -21,12 +21,12 @@ helm install ./src --namespace rhak --set replicas=3
 ```bash
 # Find the master, it will be 0 unless it's been killed, that's the guarantee of StatefulSets
 kubectl exec --namespace=rhak redis-high-availability-kluster-server-${N} -ti -- /bin/sh
-redis set food good
+redis-cli set food good
 ```
 
 ```bash
 # Connected to any node
-redis get food
+redis-cli get food
 ```
 
 #### Scaling
